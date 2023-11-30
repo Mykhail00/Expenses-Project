@@ -1,7 +1,3 @@
-- modeled database
-- created entities and set relationships 
-- generated migrations
-
-###### DB Diagram
-
-![Screenshot](Diagram.png)
+- added User Authentication/Registration UI elements
+- added AuthController to register and persist user in DB with hashed password
+- User entity modified to set timestamps on Lifecycle Events

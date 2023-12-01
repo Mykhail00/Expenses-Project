@@ -1,3 +1,4 @@
-- added User Authentication/Registration UI elements
-- added AuthController to register and persist user in DB with hashed password
-- User entity modified to set timestamps on Lifecycle Events
+- added Valitron validation component
+- set rules for Vlitron to handle registration form request
+- throw ValidationException on Valitron errors and catch them in ValidationExceptionMiddleware with redirection response
+- refactored to get app instance from the container

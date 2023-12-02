@@ -59,5 +59,4 @@ class AuthController
 
         return $response;
     }
-
 }

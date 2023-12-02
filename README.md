@@ -1,4 +1,5 @@
-- added Valitron validation component
-- set rules for Vlitron to handle registration form request
-- throw ValidationException on Valitron errors and catch them in ValidationExceptionMiddleware with redirection response
-- refactored to get app instance from the container
+- sessions added to persist data across requests
+- added sessions middleware to start sessions
+- validation errors and registration form data (excluding sensitive fields) are passed to sessions in ValidationExceptionMiddleware
+- added middlewares to pass validation errors and previously submitted form data to twig templates globally 
+- modified register.twig to dynamically add bootstrap components to highlight error input fields

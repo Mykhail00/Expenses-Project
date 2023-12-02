@@ -1,5 +1,3 @@
-- sessions added to persist data across requests
-- added sessions middleware to start sessions
-- validation errors and registration form data (excluding sensitive fields) are passed to sessions in ValidationExceptionMiddleware
-- added middlewares to pass validation errors and previously submitted form data to twig templates globally 
-- modified register.twig to dynamically add bootstrap components to highlight error input fields
+- added routes protection with Auth and Guest Middlewares 
+- added user authentication using sessions
+- added session cookie parameters

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Exception;
 
-class ValidationException extends \RuntimeException
+use RuntimeException;
+
+class ValidationException extends RuntimeException
 {
     public function __construct(
         public readonly array $errors,

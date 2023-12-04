@@ -1,3 +1,4 @@
-- added routes protection with Auth and Guest Middlewares 
-- added user authentication using sessions
-- added session cookie parameters
+- added AuthenticateMiddleware to attach user object to request
+- added Auth class to provide user authentication related logic
+- added UserProviderService to retrieve user from DB
+- added Auth/User/UserProviderService interfaces and refactored to use interfaces instead of implementations

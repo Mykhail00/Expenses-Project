@@ -1,13 +1,17 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use App\Auth;
 use App\Config;
 use App\Contracts\AuthInterface;
+use App\Contracts\SessionInterface;
 use App\Contracts\UserProviderServiceInterface;
+use App\DataObjects\SessionConfig;
 use App\Enum\AppEnvironment;
+use App\Enum\SameSite;
 use App\Services\UserProviderService;
+use App\Session;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use Psr\Container\ContainerInterface;
@@ -27,7 +31,7 @@ use Twig\Extra\Intl\IntlExtension;
 use function DI\create;
 
 return [
-    App::class => function(ContainerInterface $container) {
+    App::class => function (ContainerInterface $container) {
         AppFactory::setContainer($container);
 
         $addMiddlewares = require CONFIG_PATH . '/middleware.php';
@@ -40,17 +44,17 @@ return [
 
         return $app;
     },
-    Config::class                 => create(Config::class)->constructor(require CONFIG_PATH . '/app.php'),
-    EntityManager::class          => fn(Config $config) => EntityManager::create(
+    Config::class => create(Config::class)->constructor(require CONFIG_PATH . '/app.php'),
+    EntityManager::class => fn(Config $config) => EntityManager::create(
         $config->get('doctrine.connection'),
         ORMSetup::createAttributeMetadataConfiguration(
             $config->get('doctrine.entity_dir'),
             $config->get('doctrine.dev_mode')
         )
     ),
-    Twig::class                   => function (Config $config, ContainerInterface $container) {
+    Twig::class => function (Config $config, ContainerInterface $container) {
         $twig = Twig::create(VIEW_PATH, [
-            'cache'       => STORAGE_PATH . '/cache/templates',
+            'cache' => STORAGE_PATH . '/cache/templates',
             'auto_reload' => AppEnvironment::isDevelopment($config->get('app_environment')),
         ]);
 
@@ -63,7 +67,7 @@ return [
     /**
      * The following two bindings are needed for EntryFilesTwigExtension & AssetExtension to work for Twig
      */
-    'webpack_encore.packages'     => fn() => new Packages(
+    'webpack_encore.packages' => fn() => new Packages(
         new Package(new JsonManifestVersionStrategy(BUILD_PATH . '/manifest.json'))
     ),
     'webpack_encore.tag_renderer' => fn(ContainerInterface $container) => new TagRenderer(
@@ -72,5 +76,15 @@ return [
     ),
     ResponseFactoryInterface::class => fn(App $app) => $app->getResponseFactory(),
     AuthInterface::class => fn(ContainerInterface $container) => $container->get(Auth::class),
-    UserProviderServiceInterface::class => fn(ContainerInterface $container) => $container->get(UserProviderService::class),
+    UserProviderServiceInterface::class => fn(ContainerInterface $container) => $container->get(
+        UserProviderService::class
+    ),
+    SessionInterface::class => fn(Config $config) => new Session(
+        new SessionConfig(
+            $config->get('session.name', ''),
+            $config->get('session.secure', true),
+            $config->get('session.httponly', true),
+            SameSite::from($config->get('session.samesite', 'lax'))
+        )
+    ),
 ];

@@ -1,4 +1,3 @@
-- added AuthenticateMiddleware to attach user object to request
-- added Auth class to provide user authentication related logic
-- added UserProviderService to retrieve user from DB
-- added Auth/User/UserProviderService interfaces and refactored to use interfaces instead of implementations
+- created SessionInterface and Session class with session related logic to avoid using $_SESSION directly
+- refactored Guest/StartSession middlewares, Auth class to use SessionInterface
+- Auth and Authenticate middlewares combined, attachment of user object to the request is moved to AuthMiddleware

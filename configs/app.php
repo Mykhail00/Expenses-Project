@@ -5,6 +5,7 @@ declare(strict_types = 1);
 use App\Enum\AppEnvironment;
 
 $appEnv = $_ENV['APP_ENV'] ?? AppEnvironment::Production->value;
+$appSnakeName = str_replace(' ', '_', strtolower($_ENV['APP_NAME']));
 
 return [
     'app_name'              => $_ENV['APP_NAME'],
@@ -25,5 +26,11 @@ return [
             'user'     => $_ENV['DB_USER'],
             'password' => $_ENV['DB_PASS'],
         ],
+    ],
+    'session' => [
+        'name' => $appSnakeName . '_session',
+        'secure' => true,
+        'httponly' => true,
+        'samesite' => 'lax',
     ],
 ];

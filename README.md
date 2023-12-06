@@ -1,3 +1,3 @@
-- created SessionInterface and Session class with session related logic to avoid using $_SESSION directly
-- refactored Guest/StartSession middlewares, Auth class to use SessionInterface
-- Auth and Authenticate middlewares combined, attachment of user object to the request is moved to AuthMiddleware
+- added flash() and getFlash() methods to Session interface to save and retrieve flash messages from session
+- refactored StartSessionMiddleware to write url to session as 'previousUri'
+- created RequestService to provide valid referer or previous url 

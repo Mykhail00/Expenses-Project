@@ -76,4 +76,17 @@ class Session implements SessionInterface
     {
         unset($_SESSION[$key]);
     }
+
+    public function flash(string $key, array $messages): void
+    {
+        $_SESSION[$this->sessionConfig->flashName][$key] = $messages;
+    }
+
+    public function getFlash(string $key): array
+    {
+        $message = $_SESSION[$this->sessionConfig->flashName][$key] ?? [];
+        unset($_SESSION[$this->sessionConfig->flashName][$key]);
+
+        return $message;
+    }
 }

@@ -1,3 +1,2 @@
-- added flash() and getFlash() methods to Session interface to save and retrieve flash messages from session
-- refactored StartSessionMiddleware to write url to session as 'previousUri'
-- created RequestService to provide valid referer or previous url 
+- Form request validation (register/logIn) abstracted into Request Validators classes
+- Created RequestValidatorFactory to instantiate Request Validators and resolve their dependencies

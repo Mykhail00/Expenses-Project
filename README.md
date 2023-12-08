@@ -1,2 +1,4 @@
-- Form request validation (register/logIn) abstracted into Request Validators classes
-- Created RequestValidatorFactory to instantiate Request Validators and resolve their dependencies
+- installed slim CSRF package
+- configured csrf middleware in container bindings
+- created CsrfFieldsMiddleware to pass csrf hidden input fields to templated globally
+- added csrf fields to forms

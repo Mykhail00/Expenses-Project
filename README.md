@@ -1,4 +1,7 @@
-- installed slim CSRF package
-- configured csrf middleware in container bindings
-- created CsrfFieldsMiddleware to pass csrf hidden input fields to templated globally
-- added csrf fields to forms
+- added categories view
+- added categories routes
+- grouped routes
+- added MethodOverrideMiddleware to allow DELETE requests
+- added CategoriesController
+- added CategoryService
+- entities refactored to use HasTimestamp Trait for PrePersist timestamp autocreation

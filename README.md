@@ -1,7 +1,5 @@
-- added categories view
-- added categories routes
-- grouped routes
-- added MethodOverrideMiddleware to allow DELETE requests
-- added CategoriesController
-- added CategoryService
-- entities refactored to use HasTimestamp Trait for PrePersist timestamp autocreation
+- added bootstrap Modal to popup on category change button
+- created endpoint on backend for AJAX request
+- created method in controller to fetch data from DB and return as part of response body(and formed as json)
+- created frontend AJAX request in categories.js using Fetch API
+- created js function to display result of fetch AJAX request on frontend (as part of bootstrap Modal)

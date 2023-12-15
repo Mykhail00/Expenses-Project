@@ -1,5 +1,6 @@
-- added bootstrap Modal to popup on category change button
-- created endpoint on backend for AJAX request
-- created method in controller to fetch data from DB and return as part of response body(and formed as json)
-- created frontend AJAX request in categories.js using Fetch API
-- created js function to display result of fetch AJAX request on frontend (as part of bootstrap Modal)
+- created endpoint for AJAX update category POST request
+- refactored CSRF guard object to use custom CSRF failure handler
+- added CSRF fields inside layout meta tags to access them using JS
+- created AJAX POST request using Fetch API to save updated category name
+- CSRF fields added to request to pass CSRF middleware
+- added Slim BodyParsingMiddleware to handle json decoding

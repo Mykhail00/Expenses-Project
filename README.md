@@ -1,6 +1,6 @@
-- created endpoint for AJAX update category POST request
-- refactored CSRF guard object to use custom CSRF failure handler
-- added CSRF fields inside layout meta tags to access them using JS
-- created AJAX POST request using Fetch API to save updated category name
-- CSRF fields added to request to pass CSRF middleware
-- added Slim BodyParsingMiddleware to handle json decoding
+- created method on Categories Service to update the category
+- created ajax.js to provide abstraction over Fetch API
+- refactored categories.js to use ajax.js functions
+- added validation of XHR request using validator in controller and regular expression in route declarations
+- refactored Validation Exception Middleware to return JSON formed response on XHR request validation exception 
+- added XHR check on Start Session Middleware to avoid writing previous url into sessions on XHR request

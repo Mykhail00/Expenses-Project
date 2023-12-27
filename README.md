@@ -1,6 +1,3 @@
-- created method on Categories Service to update the category
-- created ajax.js to provide abstraction over Fetch API
-- refactored categories.js to use ajax.js functions
-- added validation of XHR request using validator in controller and regular expression in route declarations
-- refactored Validation Exception Middleware to return JSON formed response on XHR request validation exception 
-- added XHR check on Start Session Middleware to avoid writing previous url into sessions on XHR request
+- added validation errors handling for categories editing (ajax.js)
+- validation errors are displayed on client side with dynamically generated divs 
+- refactored categories delete action to use ajax

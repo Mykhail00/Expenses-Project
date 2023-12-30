@@ -10,6 +10,7 @@ use App\RequestValidators\CreateCategoryRequestValidator;
 use App\RequestValidators\UpdateCategoryRequestValidator;
 use App\ResponseFormatter;
 use App\Services\CategoryService;
+use App\Services\RequestService;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Views\Twig;
@@ -20,7 +21,8 @@ class CategoriesController
         private readonly Twig $twig,
         private readonly RequestValidatorFactoryInterface $requestValidatorFactory,
         private readonly CategoryService $categoryService,
-        private readonly ResponseFormatter $responseFormatter
+        private readonly ResponseFormatter $responseFormatter,
+        private readonly RequestService $requestService
     ) {
     }
 
@@ -42,16 +44,16 @@ class CategoriesController
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        $this->categoryService->delete((int) $args['id']);
+        $this->categoryService->delete((int)$args['id']);
 
         return $response;
     }
 
     public function get(Request $request, Response $response, array $args): Response
     {
-        $category = $this->categoryService->getById((int) $args['id']);
+        $category = $this->categoryService->getById((int)$args['id']);
 
-        if (! $category) {
+        if (!$category) {
             return $response->withStatus(404);
         }
 
@@ -66,9 +68,9 @@ class CategoriesController
             $args + $request->getParsedBody()
         );
 
-        $category = $this->categoryService->getById((int) $data['id']);
+        $category = $this->categoryService->getById((int)$data['id']);
 
-        if (! $category) {
+        if (!$category) {
             return $response->withStatus(404);
         }
 
@@ -79,14 +81,14 @@ class CategoriesController
 
     public function load(Request $request, Response $response): Response
     {
-        $params = $request->getQueryParams();
+        $params = $this->requestService->getDataTableQueryParameters($request);
 
-        $categories = $this->categoryService->getPaginatedCategories((int) $params['start'], (int) $params['length']);
+        $categories = $this->categoryService->getPaginatedCategories($params);
 
         $transformer = function (Category $category) {
             return [
-                'id'        => $category->getId(),
-                'name'      => $category->getName(),
+                'id' => $category->getId(),
+                'name' => $category->getName(),
                 'createdAt' => $category->getCreatedAt()->format('m/d/Y g:i A'),
                 'updatedAt' => $category->getCreatedAt()->format('m/d/Y g:i A'),
             ];
@@ -94,14 +96,11 @@ class CategoriesController
 
         $totalCategories = count($categories);
 
-        return $this->responseFormatter->asJson(
+        return $this->responseFormatter->asDataTable(
             $response,
-            [
-                'data'            => array_map($transformer, (array) $categories->getIterator()),
-                'draw'            => (int) $params['draw'],
-                'recordsTotal'    => $totalCategories,
-                'recordsFiltered' => $totalCategories,
-            ]
+            array_map($transformer, (array) $categories->getIterator()),
+            $params->draw,
+            $totalCategories,
         );
     }
 }

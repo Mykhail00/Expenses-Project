@@ -1,5 +1,3 @@
-- added DataTables JS plugin for categories pagination 
-- refactored categories.js to use DataTables with ajax requests to fetch categories list
-- created endpoint for categories DataTables ajax requests
-- created method on CategoriesService to provide categories using DataTables offset and limit query params
-- return data formed as json DataTables can parse
+- added categories sorting 
+- added categories searching 
+- created DTO for DataTables query params

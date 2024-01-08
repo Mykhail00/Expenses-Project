@@ -87,33 +87,6 @@ class Transaction
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTime $createdAt): Transaction
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
-
-    public function getUpdatedAt(): \DateTime
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTime $updatedAt): Transaction
-    {
-        $this->updatedAt = $updatedAt;
-        return $this;
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
     public function setUser(User $user): Transaction
     {
         $user->addTransaction($this);

@@ -1,4 +1,4 @@
-- added Transactions routes 
-- added TransactionController
-- added TransactionService
-- added templates and JS file for transactions 
+- added upload receipt capabilities on frontend
+- installed Flysystem packages to store and validate files
+- added file validation by name, size, MIME types
+- refactored Receipt entity to store original file name along with storage file name  

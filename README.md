@@ -1,4 +1,2 @@
-- added upload receipt capabilities on frontend
-- installed Flysystem packages to store and validate files
-- added file validation by name, size, MIME types
-- refactored Receipt entity to store original file name along with storage file name  
+- added receipts UI elements to transactions Data Tables
+- added downloading receipts functionality

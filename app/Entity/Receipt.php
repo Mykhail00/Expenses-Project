@@ -20,6 +20,9 @@ class Receipt
     #[Column]
     private string $filename;
 
+    #[Column(name: 'media_type')]
+    private string $mediaType;
+
     #[Column(name: 'storage_filename')]
     private string $storageFilename;
 
@@ -76,6 +79,18 @@ class Receipt
     public function setStorageFilename(string $storageFilename): Receipt
     {
         $this->storageFilename = $storageFilename;
+
+        return $this;
+    }
+
+    public function getMediaType(): string
+    {
+        return $this->mediaType;
+    }
+
+    public function setMediaType(string $mediaType): Receipt
+    {
+        $this->mediaType = $mediaType;
 
         return $this;
     }

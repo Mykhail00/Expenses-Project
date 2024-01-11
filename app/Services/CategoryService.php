@@ -73,9 +73,15 @@ class CategoryService
 
     public function getCategoryNames(): array
     {
-        return $this->entityManager->getRepository(Category::class)->createQueryBuilder('c')
+        return $this->entityManager
+            ->getRepository(Category::class)->createQueryBuilder('c')
             ->select('c.id', 'c.name')
             ->getQuery()
             ->getArrayResult();
+    }
+
+    public function findByName(string $name): ?Category
+    {
+        return $this->entityManager->getRepository(Category::class)->findBy(['name' => $name])[0] ?? null;
     }
 }

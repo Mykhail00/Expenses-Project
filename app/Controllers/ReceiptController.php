@@ -91,6 +91,7 @@ class ReceiptController
             return $response->withStatus(401);
         }
 
+        $this->filesystem->delete('receipts/'. $receipt->getStorageFilename());
         $this->receiptService->delete($receipt);
 
         return $response;

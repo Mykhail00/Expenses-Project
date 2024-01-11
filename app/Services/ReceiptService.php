@@ -44,8 +44,6 @@ class ReceiptService
 
     public function delete(Receipt $receipt): void
     {
-        $this->filesystem->delete('receipts/'. $receipt->getStorageFilename());
-
         $this->entityManager->remove($receipt);
         $this->entityManager->flush();
     }

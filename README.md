@@ -1,2 +1,2 @@
-- added receipts UI elements to transactions Data Tables
-- added downloading receipts functionality
+- added UI elements to allow uploading CSV file with transactions
+- added capabilities to add transactions from a CSV file

@@ -75,6 +75,7 @@ class Category
     public function addTransaction(Transaction $transaction): Category
     {
         $this->transactions->add($transaction);
+
         return $this;
     }
 }

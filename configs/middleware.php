@@ -29,10 +29,10 @@ return function (App $app) {
     $app->add(ValidationErrorsMiddleware::class);
     $app->add(OldFormDataMiddleware::class);
     $app->add(StartSessionMiddleware::class);
-    $app->add(BodyParsingMiddleware::class);
     if (AppEnvironment::isDevelopment($config->get('app_environment'))) {
         $app->add(new ClockworkMiddleware($app, $container->get(Clockwork::class)));
     }
+    $app->add(BodyParsingMiddleware::class);
     $app->addErrorMiddleware(
         (bool) $config->get('display_error_details'),
         (bool) $config->get('log_errors'),

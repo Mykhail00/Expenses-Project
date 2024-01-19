@@ -1,5 +1,5 @@
 {
-  "name": "expennies",
+  "name": "expenses",
   "version": "1.0.0",
   "scripts": {
     "dev": "encore dev",

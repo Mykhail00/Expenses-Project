@@ -26,7 +26,7 @@ class TransactionImporterController
             $request->getUploadedFiles()
         )['importFile'];
 
-        $user     = $request->getAttribute('user');
+        $user = $request->getAttribute('user');
 
         $this->transactionImporterService->importFromFile($file->getStream()->getMetadata('uri'), $user);
 

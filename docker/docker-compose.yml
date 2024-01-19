@@ -9,7 +9,7 @@ services:
         USER_ID: '${WWWUSER:-1000}'
         GROUP_ID: '${WWWGROUP:-1000}'
         USER: '${USER:-whoami}'
-    container_name: expennies-app
+    container_name: expenses-app
     restart: always
     working_dir: /var/www/
     extra_hosts:
@@ -19,7 +19,7 @@ services:
       - ./local.ini:/usr/local/etc/php/conf.d/local.ini
   nginx:
     image: nginx:1.19-alpine
-    container_name: expennies-nginx
+    container_name: expenses-nginx
     restart: always
     ports:
       - "8000:80"
@@ -27,7 +27,7 @@ services:
       - ../:/var/www
       - ./nginx:/etc/nginx/conf.d
   db:
-    container_name: expennies-db
+    container_name: expenses-db
     image: mysql:8.0
     volumes:
       - ./storage/mysql:/var/lib/mysql

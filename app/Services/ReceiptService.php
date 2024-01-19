@@ -9,14 +9,8 @@ use App\Entity\Transaction;
 use Doctrine\ORM\EntityManager;
 use League\Flysystem\Filesystem;
 
-class ReceiptService
+class ReceiptService extends EntityManagerService
 {
-    public function __construct(
-        private readonly EntityManager $entityManager,
-        private readonly Filesystem $filesystem,
-    ) {
-    }
-
     public function create(
         Transaction $transaction,
         string $filename,
@@ -32,7 +26,6 @@ class ReceiptService
         $receipt->setCreatedAt(new \DateTime());
 
         $this->entityManager->persist($receipt);
-        $this->entityManager->flush();
 
         return $receipt;
     }
@@ -45,6 +38,5 @@ class ReceiptService
     public function delete(Receipt $receipt): void
     {
         $this->entityManager->remove($receipt);
-        $this->entityManager->flush();
     }
 }

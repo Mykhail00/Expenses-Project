@@ -1,2 +1,3 @@
-- grouped parsed transactions inserts into batches to speed up execution
-- detected Unit Of Work memory leaks and fixed with EM clear method
+- added base EntityManagerService (for other services to extend from ) to proxy flush() and clear() methods to Doctrine EM
+- refactored deprecated Doctrine EM clear() method usage
+- added toggle reviewed transactions functionality

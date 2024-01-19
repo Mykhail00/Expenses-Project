@@ -26,6 +26,9 @@ class Transaction
     #[Id, Column(options: ['unsigned' => true]), GeneratedValue]
     private int $id;
 
+    #[Column(name: 'was_reviewed', options: ['default' => 0])]
+    private bool $wasReviewed;
+
     #[Column]
     private string $description;
 
@@ -89,7 +92,6 @@ class Transaction
 
     public function setUser(User $user): Transaction
     {
-//        $user->addTransaction($this);
         $this->user = $user;
         return $this;
     }
@@ -101,7 +103,6 @@ class Transaction
 
     public function setCategory(?Category $category): Transaction
     {
-//        $category?->addTransaction($this);
         $this->category = $category;
         return $this;
     }
@@ -114,6 +115,18 @@ class Transaction
     public function addReceipt(Receipt $receipt): Transaction
     {
         $this->receipts->add($receipt);
+        return $this;
+    }
+
+    public function wasReviewed(): bool
+    {
+        return $this->wasReviewed;
+    }
+
+    public function setReviewed(bool $wasReviewed): Transaction
+    {
+        $this->wasReviewed = $wasReviewed;
+
         return $this;
     }
 }

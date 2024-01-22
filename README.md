@@ -1,3 +1,2 @@
-- added base EntityManagerService (for other services to extend from ) to proxy flush() and clear() methods to Doctrine EM
-- refactored deprecated Doctrine EM clear() method usage
-- added toggle reviewed transactions functionality
+- created decorator EntityManagerService as a wrapper around EntityManager
+- refactored to use EntityManagerService instead of native EntityManager

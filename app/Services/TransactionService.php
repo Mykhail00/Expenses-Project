@@ -4,20 +4,24 @@ declare(strict_types = 1);
 
 namespace App\Services;
 
+use App\Contracts\EntityManagerServiceInterface;
 use App\DataObjects\DataTableQueryParams;
 use App\DataObjects\TransactionData;
 use App\Entity\Transaction;
 use App\Entity\User;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
-class TransactionService extends EntityManagerService
+class TransactionService
 {
+    public function __construct(private readonly EntityManagerServiceInterface $entityManager)
+    {
+    }
+
     public function create(TransactionData $transactionData, User $user): Transaction
     {
         $transaction = new Transaction();
 
         $transaction->setUser($user);
-        $transaction->setReviewed(false);
 
         return $this->update($transaction, $transactionData);
     }
@@ -52,12 +56,6 @@ class TransactionService extends EntityManagerService
         return new Paginator($query);
     }
 
-    public function delete(int $id): void
-    {
-        $transaction = $this->entityManager->find(Transaction::class, $id);
-        $this->entityManager->remove($transaction);
-    }
-
     public function getById(int $id): ?Transaction
     {
         return $this->entityManager->find(Transaction::class, $id);
@@ -70,15 +68,11 @@ class TransactionService extends EntityManagerService
         $transaction->setDate($transactionData->date);
         $transaction->setCategory($transactionData->category);
 
-        $this->entityManager->persist($transaction);
-
         return $transaction;
     }
 
     public function toggleReviewed(Transaction $transaction): void
     {
         $transaction->setReviewed(! $transaction->wasReviewed());
-
-        $this->entityManager->persist($transaction);
     }
 }

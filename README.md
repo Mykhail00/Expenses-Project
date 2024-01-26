@@ -1,2 +1,4 @@
-- created decorator EntityManagerService as a wrapper around EntityManager
-- refactored to use EntityManagerService instead of native EntityManager
+- created custom route strategy class using Reflection API to allow injecting entities directly into route and 
+controller methods
+- refactored Slim app to use custom route strategy
+- refactored controllers to use injected entities

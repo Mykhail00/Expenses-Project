@@ -14,6 +14,7 @@ use App\DataObjects\SessionConfig;
 use App\Enum\AppEnvironment;
 use App\Enum\SameSite;
 use App\Enum\StorageDriver;
+use App\Filters\UserFilter;
 use App\RequestValidators\RequestValidatorFactory;
 use App\RouteEntityBindingStrategy;
 use App\Services\EntityManagerService;
@@ -21,6 +22,7 @@ use App\Services\UserProviderService;
 use App\Session;
 use Clockwork\DataSource\DoctrineDataSource;
 use Clockwork\Storage\FileStorage;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
@@ -64,13 +66,19 @@ return [
         return $app;
     },
     Config::class => create(Config::class)->constructor(require CONFIG_PATH . '/app.php'),
-    EntityManagerInterface::class => fn(Config $config) => EntityManager::create(
-        $config->get('doctrine.connection'),
-        ORMSetup::createAttributeMetadataConfiguration(
+    EntityManagerInterface::class           => function (Config $config) {
+        $ormConfig = ORMSetup::createAttributeMetadataConfiguration(
             $config->get('doctrine.entity_dir'),
             $config->get('doctrine.dev_mode')
-        )
-    ),
+        );
+
+        $ormConfig->addFilter('user', UserFilter::class);
+
+        return new EntityManager(
+            DriverManager::getConnection($config->get('doctrine.connection'), $ormConfig),
+            $ormConfig
+        );
+    },
     Twig::class => function (Config $config, ContainerInterface $container) {
         $twig = Twig::create(VIEW_PATH, [
             'cache' => STORAGE_PATH . '/cache/templates',

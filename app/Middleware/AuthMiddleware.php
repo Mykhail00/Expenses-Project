@@ -3,7 +3,9 @@
 namespace App\Middleware;
 
 use App\Contracts\AuthInterface;
+use App\Contracts\EntityManagerServiceInterface;
 use App\Contracts\SessionInterface;
+use App\Services\EntityManagerService;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -14,9 +16,10 @@ use Slim\Views\Twig;
 class AuthMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        public readonly ResponseFactoryInterface $responseFactory,
-        public readonly AuthInterface $auth,
-        public readonly Twig $twig
+        private readonly ResponseFactoryInterface $responseFactory,
+        private readonly AuthInterface $auth,
+        private readonly Twig $twig,
+        private readonly EntityManagerServiceInterface $entityManagerService
     ) {
     }
 
@@ -24,6 +27,8 @@ class AuthMiddleware implements MiddlewareInterface
     {
         if ($user = $this->auth->user()) {
             $this->twig->getEnvironment()->addGlobal('auth', ['id' => $user->getId(), 'name' => $user->getName()]);
+
+            $this->entityManagerService->enableUserAuthFilter($user->getId());
 
             return $handler->handle($request->withAttribute('user', $user));
         }

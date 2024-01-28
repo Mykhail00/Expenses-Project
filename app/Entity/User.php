@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Contracts\OwnableInterface;
 use App\Contracts\UserInterface;
 use App\Entity\Traits\HasTimestamps;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,6 +22,7 @@ use Doctrine\ORM\Mapping\Table;
 class User implements UserInterface
 {
     use HasTimestamps;
+
     #[Id, Column(options: ['unsigned' => true]), GeneratedValue]
     private int $id;
 
@@ -103,5 +105,10 @@ class User implements UserInterface
     {
         $this->categories->add($category);
         return $this;
+    }
+
+    public function canManage(OwnableInterface $entity): bool
+    {
+        return $this->getId() === $entity->getUser()->getId();
     }
 }

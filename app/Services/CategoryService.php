@@ -25,7 +25,8 @@ class CategoryService
 
     public function getPaginatedCategories(DataTableQueryParams $params): Paginator
     {
-        $query = $this->entityManager->getRepository(Category::class)
+        $query = $this->entityManager
+            ->getRepository(Category::class)
             ->createQueryBuilder('c')
             ->setFirstResult($params->start)
             ->setMaxResults($params->length);

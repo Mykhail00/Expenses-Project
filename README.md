@@ -1,3 +1,3 @@
-- created Doctrine UserFilter for Authorization
-- registered filter
-- enabled filter in AuthMiddleware
+- created Mailhog container
+- added mail sending logic upon user registration (using Symfony Mailer and Twig TemplatedEmail)
+- added EmailVerify middleware to check for the User Entity email verifiedAt flag

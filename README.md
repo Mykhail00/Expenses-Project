@@ -1,3 +1,4 @@
-- created Mailhog container
-- added mail sending logic upon user registration (using Symfony Mailer and Twig TemplatedEmail)
-- added EmailVerify middleware to check for the User Entity email verifiedAt flag
+- constructed signed url on user registration with hashed URL signature as one of the query params
+- added middleware to check if signed URL request signature is valid
+- added additional check to verify that URL route params (id, hashed email) hasn't been modified 
+- implemented resend email functionality

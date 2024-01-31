@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Contracts;
 
 use App\DataObjects\RegisterUserData;
+use App\Entity\User;
 
 interface UserProviderServiceInterface
 {
@@ -13,4 +14,6 @@ interface UserProviderServiceInterface
     public function getByCredentials(array $credentials): ?UserInterface;
 
     public function createUser(RegisterUserData $data): UserInterface;
+
+    public function verifyUser(User $user): void;
 }

@@ -32,6 +32,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\App;
 use Slim\Csrf\Guard;
 use Slim\Factory\AppFactory;
+use Slim\Interfaces\RouteParserInterface;
 use Slim\Views\Twig;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Bridge\Twig\Mime\BodyRenderer;
@@ -151,5 +152,6 @@ return [
 
         return new Mailer($transport);
     },
-    BodyRendererInterface::class => fn(Twig $twig) => new BodyRenderer($twig->getEnvironment())
+    BodyRendererInterface::class => fn(Twig $twig) => new BodyRenderer($twig->getEnvironment()),
+    RouteParserInterface::class => fn(App $app) => $app->getRouteCollector()->getRouteParser()
 ];

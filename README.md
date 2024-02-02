@@ -1,4 +1,3 @@
-- constructed signed url on user registration with hashed URL signature as one of the query params
-- added middleware to check if signed URL request signature is valid
-- added additional check to verify that URL route params (id, hashed email) hasn't been modified 
-- implemented resend email functionality
+- added model for 2FA code to show up on user logging in
+- added UserLoginCode Entity to have separate table dedicated for codes
+- added sending Email with generated code

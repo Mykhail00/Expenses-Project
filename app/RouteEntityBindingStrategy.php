@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App;
 
 use App\Contracts\EntityManagerServiceInterface;
-use http\Exception\InvalidArgumentException;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use ReflectionFunction;
 use ReflectionFunctionAbstract;
+use ReflectionMethod;
 use Slim\Interfaces\InvocationStrategyInterface;
 
 class RouteEntityBindingStrategy implements InvocationStrategyInterface
@@ -52,7 +53,7 @@ class RouteEntityBindingStrategy implements InvocationStrategyInterface
                     $entityId = $routeArguments[$paramName] ?? null;
 
                     if (!$entityId || $parameter->allowsNull()) {
-                        throw new InvalidArgumentException(
+                        throw new \InvalidArgumentException(
                             'Unable to resolve argument "' . $paramName . '" in the callable'
                         );
                     }
@@ -74,7 +75,7 @@ class RouteEntityBindingStrategy implements InvocationStrategyInterface
     public function createReflectionForCallable(callable $callable): ReflectionFunctionAbstract
     {
         return is_array($callable)
-            ? new \ReflectionMethod($callable[0], $callable[1])
-            : new \ReflectionFunction($callable);
+            ? new ReflectionMethod($callable[0], $callable[1])
+            : new ReflectionFunction($callable);
     }
 }

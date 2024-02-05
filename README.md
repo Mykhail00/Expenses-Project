@@ -1,3 +1,4 @@
-- added model for 2FA code to show up on user logging in
-- added UserLoginCode Entity to have separate table dedicated for codes
-- added sending Email with generated code
+- added verification code validation
+- deactivate all active codes and remove '2fa' key from sessions on logging in
+- added User Profile page 
+- added functionality to change name, enable/disable 2FA

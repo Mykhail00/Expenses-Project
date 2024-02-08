@@ -4,30 +4,34 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Traits\HasTimestamps;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity, Table('user_login_codes')]
-class UserLoginCode
+#[Entity, Table('password_resets')]
+#[HasLifecycleCallbacks]
+class PasswordReset
 {
+    use HasTimestamps;
+
     #[Id, Column(options: ['unsigned' => true]), GeneratedValue]
     private int $id;
 
-    #[Column(length: 6)]
-    private string $code;
+    #[Column]
+    private string $email;
+
+    #[Column(unique: true)]
+    private string $token;
 
     #[Column(name: 'is_active', options: ['default' => true])]
     private bool $isActive;
 
     #[Column]
     private \DateTime $expiration;
-
-    #[ManyToOne]
-    private User $user;
 
     public function __construct()
     {
@@ -39,14 +43,14 @@ class UserLoginCode
         return $this->id;
     }
 
-    public function getCode(): string
+    public function getToken(): string
     {
-        return $this->code;
+        return $this->token;
     }
 
-    public function setCode(string $code): UserLoginCode
+    public function setToken(string $token): PasswordReset
     {
-        $this->code = $code;
+        $this->token = $token;
         return $this;
     }
 
@@ -55,7 +59,7 @@ class UserLoginCode
         return $this->isActive;
     }
 
-    public function setIsActive(bool $isActive): UserLoginCode
+    public function setIsActive(bool $isActive): PasswordReset
     {
         $this->isActive = $isActive;
         return $this;
@@ -66,20 +70,21 @@ class UserLoginCode
         return $this->expiration;
     }
 
-    public function setExpiration(\DateTime $expiration): UserLoginCode
+    public function setExpiration(\DateTime $expiration): PasswordReset
     {
         $this->expiration = $expiration;
         return $this;
     }
 
-    public function getUser(): User
+    public function getEmail(): string
     {
-        return $this->user;
+        return $this->email;
     }
 
-    public function setUser(User $user): UserLoginCode
+    public function setEmail(string $email): PasswordReset
     {
-        $this->user = $user;
+        $this->email = $email;
+
         return $this;
     }
 }

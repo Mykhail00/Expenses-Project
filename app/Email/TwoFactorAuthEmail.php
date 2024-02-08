@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace App\Email;
 
 use App\Config;
-use App\Entity\User;
 use App\Entity\UserLoginCode;
-use App\SignedUrl;
-use Slim\Interfaces\RouteParserInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\BodyRendererInterface;
@@ -22,7 +19,7 @@ class TwoFactorAuthEmail
     ) {
     }
 
-    public function create(UserLoginCode $userLoginCode): void
+    public function send(UserLoginCode $userLoginCode): void
     {
         $email = $userLoginCode->getUser()->getEmail();
 

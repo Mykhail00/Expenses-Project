@@ -16,4 +16,6 @@ interface UserProviderServiceInterface
     public function createUser(RegisterUserData $data): UserInterface;
 
     public function verifyUser(User $user): void;
+
+    public function updatePassword(UserInterface $user, string $password): void;
 }

@@ -8,13 +8,13 @@ use App\Contracts\RequestValidatorInterface;
 use App\Exception\ValidationException;
 use Valitron\Validator;
 
-class UpdateCategoryRequestValidator implements RequestValidatorInterface
+class ResetPasswordRequestValidator implements RequestValidatorInterface
 {
     public function validate(array $data): array
     {
         $v = new Validator($data);
-        $v->rule('required', 'name')->message('Required field');
-        $v->rule('lengthMax', 'name', 50);
+        $v->rule('required', ['password', 'confirmPassword'])->message('Require field');
+        $v->rule('equals', 'confirmPassword', 'password')->label('Confirm Password');
 
         if(! $v->validate()) {
             throw new ValidationException($v->errors());

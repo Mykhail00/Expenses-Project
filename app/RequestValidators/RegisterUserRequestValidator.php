@@ -19,7 +19,7 @@ class RegisterUserRequestValidator implements RequestValidatorInterface
     public function validate(array $data): array
     {
         $v = new Validator($data);
-        $v->rule('required', ['name', 'email', 'password', 'confirmPassword']);
+        $v->rule('required', ['name', 'email', 'password', 'confirmPassword'])->message('Required field');
         $v->rule('email', 'email');
         $v->rule('equals', 'confirmPassword', 'password')->label('Confirm Password');
         $v->rule(

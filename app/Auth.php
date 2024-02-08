@@ -108,7 +108,7 @@ class Auth implements AuthInterface
 
         $this->userLoginCodeService->deactivateAllActiveCodes($user);
 
-        $this->twoFactorAuthEmail->create($this->userLoginCodeService->generate($user));
+        $this->twoFactorAuthEmail->send($this->userLoginCodeService->generate($user));
     }
 
     public function attemptTwoFactorLogin(array $data): bool

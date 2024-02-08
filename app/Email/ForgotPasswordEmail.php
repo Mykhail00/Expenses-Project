@@ -5,40 +5,38 @@ declare(strict_types=1);
 namespace App\Email;
 
 use App\Config;
-use App\Entity\User;
+use App\Entity\PasswordReset;
 use App\SignedUrl;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\BodyRendererInterface;
 
-class SignupEmail
+class ForgotPasswordEmail
 {
     public function __construct(
         private readonly Config $config,
         private readonly MailerInterface $mailer,
         private readonly BodyRendererInterface $renderer,
-        private readonly SignedUrl $signedUrl,
+        private readonly SignedUrl $signedUrl
     ) {
     }
 
-    public function create(User $user): void
+    public function send(PasswordReset $passwordReset): void
     {
-        $email = $user->getEmail();
-        $expirationDate = new \DateTime('+30 minutes');
-        $activationLink = $this->signedUrl->fromRoute(
-            'verify',
-            ['id' => $user->getId(), 'hash' => sha1($email)],
-            $expirationDate
+        $email = $passwordReset->getEmail();
+        $resetLink = $this->signedUrl->fromRoute(
+            'password-reset',
+            ['token' => $passwordReset->getToken()],
+            $passwordReset->getExpiration()
         );
 
         $message = (new TemplatedEmail())
             ->from($this->config->get('mailer.from'))
             ->to($email)
-            ->subject('Thanks for signing up to Expenses')
-            ->htmlTemplate('emails/signup.html.twig')
+            ->subject('Your Expenses Password Reset Instructions')
+            ->htmlTemplate('emails/password_reset.html.twig')
             ->context([
-                'activationLink' => $activationLink,
-                'expirationDate' => $expirationDate,
+                'resetLink' => $resetLink
             ]);
 
         $this->renderer->render($message);

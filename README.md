@@ -1,4 +1,3 @@
-- added verification code validation
-- deactivate all active codes and remove '2fa' key from sessions on logging in
-- added User Profile page 
-- added functionality to change name, enable/disable 2FA
+- added forget password functionality by sending Signed Url with token to user email
+- email-token values are stored in a dedicated table
+- added change password functionality

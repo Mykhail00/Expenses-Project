@@ -1,3 +1,2 @@
-- added forget password functionality by sending Signed Url with token to user email
-- email-token values are stored in a dedicated table
-- added change password functionality
+- added Redis as separate container
+- connected Redis to the app for heavy operations caching

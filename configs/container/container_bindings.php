@@ -46,6 +46,8 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mime\BodyRendererInterface;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Component\RateLimiter\Storage\CacheStorage;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
 use Symfony\WebpackEncoreBundle\Asset\TagRenderer;
 use Symfony\WebpackEncoreBundle\Twig\EntryFilesTwigExtension;
@@ -63,10 +65,12 @@ return [
 
         $app = AppFactory::create();
 
-        $app->getRouteCollector()->setDefaultInvocationStrategy(new RouteEntityBindingStrategy(
-            $container->get(EntityManagerServiceInterface::class),
-            $app->getResponseFactory(),
-        ));
+        $app->getRouteCollector()->setDefaultInvocationStrategy(
+            new RouteEntityBindingStrategy(
+                $container->get(EntityManagerServiceInterface::class),
+                $app->getResponseFactory(),
+            )
+        );
 
         $addMiddlewares($app);
 
@@ -75,7 +79,7 @@ return [
         return $app;
     },
     Config::class => create(Config::class)->constructor(require CONFIG_PATH . '/app.php'),
-    EntityManagerInterface::class           => function (Config $config) {
+    EntityManagerInterface::class => function (Config $config) {
         $ormConfig = ORMSetup::createAttributeMetadataConfiguration(
             $config->get('doctrine.entity_dir'),
             $config->get('doctrine.dev_mode')
@@ -133,13 +137,13 @@ return [
         persistentTokenMode: true,
     ),
     Filesystem::class => function (Config $config) {
-        $adapter = match($config->get('storage.driver')) {
+        $adapter = match ($config->get('storage.driver')) {
             StorageDriver::Local => new League\Flysystem\Local\LocalFilesystemAdapter(STORAGE_PATH)
         };
 
         return new League\Flysystem\Filesystem($adapter);
     },
-    Clockwork::class => function(EntityManagerInterface $entityManager) {
+    Clockwork::class => function (EntityManagerInterface $entityManager) {
         $clockwork = new Clockwork();
 
         $clockwork->storage(new FileStorage(STORAGE_PATH . '/clockwork'));
@@ -150,22 +154,24 @@ return [
     EntityManagerServiceInterface::class => fn(EntityManagerInterface $entityManager) => new EntityManagerService(
         $entityManager
     ),
-    MailerInterface::class => function(Config $config) {
+    MailerInterface::class => function (Config $config) {
         $transport = Transport::fromDsn($config->get('mailer.dsn'));
 
         return new Mailer($transport);
     },
     BodyRendererInterface::class => fn(Twig $twig) => new BodyRenderer($twig->getEnvironment()),
     RouteParserInterface::class => fn(App $app) => $app->getRouteCollector()->getRouteParser(),
-    CacheInterface::class => function(Config $config) {
+    CacheInterface::class => fn(RedisAdapter $redisAdapter) => new Psr16Cache($redisAdapter),
+    RedisAdapter::class => function (Config $config) {
         $redis = new \Redis();
         $config = $config->get('redis');
 
-        $redis->connect($config['host'], (int) $config['port']);
+        $redis->connect($config['host'], (int)$config['port']);
         $redis->auth($config['password']);
 
-        $adapter = new RedisAdapter($redis);
-
-        return new Psr16Cache($adapter);
-    }
+        return new RedisAdapter($redis);
+    },
+    RateLimiterFactory::class => fn(RedisAdapter $redisAdapter, Config $config) => new RateLimiterFactory(
+        $config->get('limiter'), new CacheStorage($redisAdapter)
+    )
 ];

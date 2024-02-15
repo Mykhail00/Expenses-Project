@@ -1,3 +1,1 @@
-- added Symfony Rate Limiter and configured to store the Limiter state in Redis cache
-- created RateLimitMiddleware with rate controlling
-- added RateLimitMiddleware to sensitive routes
+- added and configured S3 Bucket adapter for Flysystem

@@ -89,7 +89,7 @@ class CategoryController
 
         return $this->responseFormatter->asDataTable(
             $response,
-            array_map($transformer, (array)$categories->getIterator()),
+            array_map($transformer, (array) $categories->getIterator()),
             $params->draw,
             $totalCategories,
         );

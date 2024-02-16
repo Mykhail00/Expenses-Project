@@ -35,7 +35,7 @@ class TransactionImporterService
             $category = $categories[strtolower($category)] ?? null;
             $amount = str_replace(['$', ','], '', $amount);
 
-            $transactionData = new TransactionData($description, (float)$amount, $date, $category);
+            $transactionData = new TransactionData($description, (float) $amount, $date, $category);
 
             $this->entityManagerService->persist(
                 $this->transactionService->create($transactionData, $user)

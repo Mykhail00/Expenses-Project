@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -37,12 +37,12 @@ class TransactionService
             ->setFirstResult($params->start)
             ->setMaxResults($params->length);
 
-        $orderBy  = in_array($params->orderBy, ['description', 'amount', 'date', 'category'])
+        $orderBy = in_array($params->orderBy, ['description', 'amount', 'date', 'category'])
             ? $params->orderBy
             : 'date';
         $orderDir = strtolower($params->orderDir) === 'asc' ? 'asc' : 'desc';
 
-        if (! empty($params->searchTerm)) {
+        if (!empty($params->searchTerm)) {
             $query->where('t.description LIKE :description')
                 ->setParameter('description', '%' . addcslashes($params->searchTerm, '%_') . '%');
         }
@@ -73,6 +73,6 @@ class TransactionService
 
     public function toggleReviewed(Transaction $transaction): void
     {
-        $transaction->setReviewed(! $transaction->wasReviewed());
+        $transaction->setReviewed(!$transaction->wasReviewed());
     }
 }

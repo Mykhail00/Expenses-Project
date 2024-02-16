@@ -80,7 +80,7 @@ class AuthController
             $request->getParsedBody()
         );
 
-        if(! $this->auth->attemptTwoFactorLogin($data)) {
+        if (!$this->auth->attemptTwoFactorLogin($data)) {
             throw new ValidationException(['code' => ['Invalid Code']]);
         }
 

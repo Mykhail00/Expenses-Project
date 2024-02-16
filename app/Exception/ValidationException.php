@@ -12,7 +12,7 @@ class ValidationException extends RuntimeException
         public readonly array $errors,
         string $message = 'Validation Error(s)',
         int $code = 422,
-        ?\Throwable $previous = null
+        ?\Throwable $previous = null,
     ) {
         parent::__construct($message, $code, $previous);
     }

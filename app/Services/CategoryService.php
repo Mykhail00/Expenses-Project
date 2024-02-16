@@ -19,7 +19,6 @@ class CategoryService
     public function create(string $name, User $user): Category
     {
         $category = new Category();
-
         $category->setUser($user);
 
         return $this->update($category, $name);

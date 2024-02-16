@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Middleware;
 
 use Psr\Container\ContainerInterface;
@@ -13,7 +15,7 @@ class CsrfFieldsMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private readonly Twig $twig,
-        private readonly ContainerInterface $container
+        private readonly ContainerInterface $container,
     ) {
     }
 
@@ -28,10 +30,10 @@ class CsrfFieldsMiddleware implements MiddlewareInterface
 
         $this->twig->getEnvironment()->addGlobal('csrf', [
             'keys' => [
-                'name'  => $csrfNameKey,
+                'name' => $csrfNameKey,
                 'value' => $csrfValueKey
             ],
-            'name'  => $csrfName,
+            'name' => $csrfName,
             'value' => $csrfValue,
             'fields' => <<<CSRF_FIELDS
 <input type="hidden" name="$csrfNameKey" value="$csrfName">

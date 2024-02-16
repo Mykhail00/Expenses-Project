@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\DataObjects;
 
@@ -13,7 +13,7 @@ class TransactionData
         public readonly string $description,
         public readonly float $amount,
         public readonly DateTime $date,
-        public readonly ?Category $category
+        public readonly ?Category $category,
     ) {
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Controllers;
 
@@ -54,7 +54,7 @@ class PasswordResetController
     {
         $passwordReset = $this->passwordResetService->findByToken($args['token']);
 
-        if (! $passwordReset) {
+        if (!$passwordReset) {
             return $response->withHeader('Location', '/')->withStatus(302);
         }
 
@@ -69,13 +69,13 @@ class PasswordResetController
 
         $passwordReset = $this->passwordResetService->findByToken($args['token']);
 
-        if (! $passwordReset) {
+        if (!$passwordReset) {
             throw new ValidationException(['confirmPassword' => 'Invalid token']);
         }
 
         $user = $this->userProviderService->getByCredentials(['email' => $passwordReset->getEmail()]);
 
-        if (! $user) {
+        if (!$user) {
             throw new ValidationException(['confirmPassword' => 'Invalid token']);
         }
 

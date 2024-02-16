@@ -16,7 +16,7 @@ class CreateCategoryRequestValidator implements RequestValidatorInterface
         $v->rule('required', 'name')->message('Required field');
         $v->rule('lengthMax', 'name', 50);
 
-        if(! $v->validate()) {
+        if (!$v->validate()) {
             throw new ValidationException($v->errors());
         }
 

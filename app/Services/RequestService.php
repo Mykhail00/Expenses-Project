@@ -18,7 +18,7 @@ class RequestService
     {
         $referer = $request->getHeader('referer')[0];
 
-        if (! $referer) {
+        if (!$referer) {
             return $this->session->get('previousUrl');
         }
 

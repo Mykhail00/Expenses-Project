@@ -33,11 +33,11 @@ class Session implements SessionInterface
             ]
         );
 
-        if (! empty($this->sessionConfig->name)) {
+        if (!empty($this->sessionConfig->name)) {
             session_name($this->sessionConfig->name);
         }
 
-        if (! session_start()) {
+        if (!session_start()) {
             throw new SessionException('Unable to start the session');
         }
     }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\RequestValidators;
 
@@ -25,10 +25,10 @@ class TransactionRequestValidator implements RequestValidatorInterface
         $v->rule('numeric', 'amount');
         $v->rule('integer', 'category');
         $v->rule(
-            function($field, $value, $params, $fields) use (&$data) {
+            function ($field, $value, $params, $fields) use (&$data) {
                 $id = (int) $value;
 
-                if (! $id) {
+                if (!$id) {
                     return false;
                 }
 
@@ -45,7 +45,7 @@ class TransactionRequestValidator implements RequestValidatorInterface
             'category'
         )->message('Category not found');
 
-        if (! $v->validate()) {
+        if (!$v->validate()) {
             throw new ValidationException($v->errors());
         }
 

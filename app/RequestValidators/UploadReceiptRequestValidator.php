@@ -18,7 +18,7 @@ class UploadReceiptRequestValidator implements RequestValidatorInterface
         $uploadedFile = $data['receipt'] ?? null;
 
         // Validate uploaded file
-        if (! $uploadedFile) {
+        if (!$uploadedFile) {
             throw new ValidationException(['receipt' => ['Please select a receipt file']]);
         }
 
@@ -34,7 +34,7 @@ class UploadReceiptRequestValidator implements RequestValidatorInterface
 
         // Validate file name
         $fileName = $uploadedFile->getClientFilename();
-        if (! preg_match('/^[a-zA-Z0-9\s._-]+$/', $fileName)) {
+        if (!preg_match('/^[a-zA-Z0-9\s._-]+$/', $fileName)) {
             throw new ValidationException(['receipt' => ['Invalid filename']]);
         }
 
@@ -42,14 +42,14 @@ class UploadReceiptRequestValidator implements RequestValidatorInterface
         $allowedMimeTypes = ['image/jpeg', 'image/png', 'application/pdf'];
         $tmpFilePath = $uploadedFile->getStream()->getMetadata('uri');
 
-        if (! in_array($uploadedFile->getClientMediaType(), $allowedMimeTypes)) {
+        if (!in_array($uploadedFile->getClientMediaType(), $allowedMimeTypes)) {
             throw new ValidationException(['receipt' => ['Receipt has to be an image or a pdf document']]);
         }
 
         $detector = new FinfoMimeTypeDetector();
         $mimeType = $detector->detectMimeTypeFromFile($tmpFilePath);
 
-        if (! in_array($mimeType, $allowedMimeTypes)) {
+        if (!in_array($mimeType, $allowedMimeTypes)) {
             throw new ValidationException(['receipt' => ['Receipt has to be either "jpeg", "jpg", "png" or "pdf"']]);
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\RequestValidators;
 
@@ -16,7 +16,7 @@ class TransactionImportRequestValidator implements RequestValidatorInterface
         /** @var UploadedFileInterface $uploadedFile */
         $uploadedFile = $data['importFile'] ?? null;
 
-        if (! $uploadedFile) {
+        if (!$uploadedFile) {
             throw new ValidationException(['importFile' => ['Please select a file to import']]);
         }
 
@@ -32,14 +32,14 @@ class TransactionImportRequestValidator implements RequestValidatorInterface
 
         $allowedMimeTypes = ['text/csv'];
 
-        if (! in_array($uploadedFile->getClientMediaType(), $allowedMimeTypes)) {
+        if (!in_array($uploadedFile->getClientMediaType(), $allowedMimeTypes)) {
             throw new ValidationException(['importFile' => ['Please select a CSV file to import']]);
         }
 
         $detector = new FinfoMimeTypeDetector();
         $mimeType = $detector->detectMimeTypeFromFile($uploadedFile->getStream()->getMetadata('uri'));
 
-        if (! in_array($mimeType, $allowedMimeTypes)) {
+        if (!in_array($mimeType, $allowedMimeTypes)) {
             throw new ValidationException(['importFile' => ['Invalid file type']]);
         }
 

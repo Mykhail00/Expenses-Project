@@ -10,7 +10,6 @@ use App\Entity\Receipt;
 use App\Entity\Transaction;
 use App\RequestValidators\UploadReceiptRequestValidator;
 use App\Services\ReceiptService;
-use App\Services\TransactionService;
 use League\Flysystem\Filesystem;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -52,7 +51,7 @@ class ReceiptController
             return $response->withStatus(401);
         }
 
-        $file = $this->filesystem->readStream('receipts/'. $receipt->getStorageFilename());
+        $file = $this->filesystem->readStream('receipts/' . $receipt->getStorageFilename());
 
         $response = $response->withHeader(
             'Content-Disposition',
@@ -68,7 +67,7 @@ class ReceiptController
             return $response->withStatus(401);
         }
 
-        $this->filesystem->delete('receipts/'. $receipt->getStorageFilename());
+        $this->filesystem->delete('receipts/' . $receipt->getStorageFilename());
 
         $this->entityManagerService->delete($receipt, true);
 

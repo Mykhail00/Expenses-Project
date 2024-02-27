@@ -17,7 +17,7 @@ class ForgotPasswordEmail
         private readonly Config $config,
         private readonly MailerInterface $mailer,
         private readonly BodyRendererInterface $renderer,
-        private readonly SignedUrl $signedUrl
+        private readonly SignedUrl $signedUrl,
     ) {
     }
 

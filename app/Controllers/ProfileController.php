@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Controllers;
 
@@ -20,7 +20,7 @@ class ProfileController
         private readonly Twig $twig,
         private readonly RequestValidatorFactoryInterface $requestValidatorFactory,
         private readonly UserProfileService $userProfileService,
-        private readonly PasswordResetService $passwordResetService
+        private readonly PasswordResetService $passwordResetService,
     ) {
     }
 

@@ -19,7 +19,7 @@ use Clockwork\Clockwork;
 
 return function (App $app) {
     $container = $app->getContainer();
-    $config    = $container->get(Config::class);
+    $config = $container->get(Config::class);
 
     $app->add(MethodOverrideMiddleware::class);
     $app->add(CsrfFieldsMiddleware::class);

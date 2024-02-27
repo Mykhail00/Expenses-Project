@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Middleware;
 
 use App\Contracts\AuthInterface;
@@ -11,6 +13,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 
 class AuthMiddleware implements MiddlewareInterface
@@ -19,7 +22,7 @@ class AuthMiddleware implements MiddlewareInterface
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly AuthInterface $auth,
         private readonly Twig $twig,
-        private readonly EntityManagerServiceInterface $entityManagerService
+        private readonly EntityManagerServiceInterface $entityManagerService,
     ) {
     }
 
@@ -27,6 +30,10 @@ class AuthMiddleware implements MiddlewareInterface
     {
         if ($user = $this->auth->user()) {
             $this->twig->getEnvironment()->addGlobal('auth', ['id' => $user->getId(), 'name' => $user->getName()]);
+            $this->twig->getEnvironment()->addGlobal(
+                'current_route',
+                RouteContext::fromRequest($request)->getRoute()->getName()
+            );
 
             $this->entityManagerService->enableUserAuthFilter($user->getId());
 

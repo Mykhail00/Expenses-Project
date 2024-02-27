@@ -35,7 +35,7 @@ class UserLoginCodeService
             ['user' => $user, 'code' => $code, 'isActive' => true]
         );
 
-        if (! $userLoginCode) {
+        if (!$userLoginCode) {
             return false;
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\RequestValidators;
 
@@ -17,7 +17,7 @@ class ForgotPasswordRequestValidator implements RequestValidatorInterface
         $v->rule('required', ['email'])->message('Required field');
         $v->rule('email', 'email');
 
-        if (! $v->validate()) {
+        if (!$v->validate()) {
             throw new ValidationException($v->errors());
         }
 

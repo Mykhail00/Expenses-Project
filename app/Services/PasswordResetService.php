@@ -12,7 +12,7 @@ class PasswordResetService
 {
     public function __construct(
         private readonly EntityManagerServiceInterface $entityManagerService,
-        private readonly HashService $hashService
+        private readonly HashService $hashService,
     ) {
     }
 
@@ -60,7 +60,7 @@ class PasswordResetService
             ->getOneOrNullResult();
     }
 
-    function updatePassword(User $user, string $password): void
+    public function updatePassword(User $user, string $password): void
     {
         $this->entityManagerService->wrapInTransaction(function () use ($user, $password) {
             $this->deactivateAllPasswordResets($user->getEmail());

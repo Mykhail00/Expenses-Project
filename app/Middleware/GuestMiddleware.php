@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Middleware;
 
 use App\Contracts\SessionInterface;
@@ -13,7 +15,7 @@ class GuestMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
-        private readonly SessionInterface $session
+        private readonly SessionInterface $session,
     ) {
     }
 

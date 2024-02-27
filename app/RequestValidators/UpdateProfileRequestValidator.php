@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\RequestValidators;
 
@@ -17,7 +17,7 @@ class UpdateProfileRequestValidator implements RequestValidatorInterface
         $v->rule('required', 'name')->message('Required field');
         $v->rule('integer', 'twoFactor')->message('Invalid Two-Factor indicator');
 
-        if (! $v->validate()) {
+        if (!$v->validate()) {
             throw new ValidationException($v->errors());
         }
 

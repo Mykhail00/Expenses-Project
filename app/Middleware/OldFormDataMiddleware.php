@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Middleware;
 
 use App\Contracts\SessionInterface;
@@ -13,7 +15,7 @@ class OldFormDataMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private readonly Twig $twig,
-        private readonly SessionInterface $session
+        private readonly SessionInterface $session,
     ) {
     }
 

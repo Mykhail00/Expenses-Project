@@ -20,7 +20,7 @@ class RateLimitMiddleware implements MiddlewareInterface
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly RequestService $requestService,
         private readonly Config $config,
-        private readonly RateLimiterFactory $rateLimiterFactory
+        private readonly RateLimiterFactory $rateLimiterFactory,
     ) {
     }
 

@@ -1,8 +1,6 @@
 <?php
 
-declare(strict_types = 1);
-
-namespace App\Command;
+declare(strict_types=1);
 
 namespace App\Command;
 
@@ -34,7 +32,7 @@ class GenerateAppKeyCommand extends Command
                 false
             );
 
-            if (! $helper->ask($input, $output, $question)) {
+            if (!$helper->ask($input, $output, $question)) {
                 return Command::SUCCESS;
             }
         }
@@ -43,7 +41,7 @@ class GenerateAppKeyCommand extends Command
 
         $envFilePath = __DIR__ . '/../../.env';
 
-        if (! file_exists($envFilePath)) {
+        if (!file_exists($envFilePath)) {
             throw new \RuntimeException('.env file not found');
         }
 

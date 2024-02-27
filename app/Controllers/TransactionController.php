@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Controllers;
 
@@ -64,7 +64,7 @@ class TransactionController
 
     public function delete(Response $response, Transaction $transaction): Response
     {
-        $this->entityManagerService->delete($transaction, true);
+        $this->transactionService->delete($transaction);
 
         return $response;
     }
@@ -72,11 +72,11 @@ class TransactionController
     public function get(Response $response, Transaction $transaction): Response
     {
         $data = [
-            'id'          => $transaction->getId(),
+            'id' => $transaction->getId(),
             'description' => $transaction->getDescription(),
-            'amount'      => $transaction->getAmount(),
-            'date'        => $transaction->getDate()->format('Y-m-d\TH:i'),
-            'category'    => $transaction->getCategory()?->getId(),
+            'amount' => $transaction->getAmount(),
+            'date' => $transaction->getDate()->format('Y-m-d\TH:i'),
+            'category' => $transaction->getCategory()?->getId(),
         ];
 
         return $this->responseFormatter->asJson($response, $data);
@@ -96,7 +96,8 @@ class TransactionController
                     (float) $data['amount'],
                     new DateTime($data['date']),
                     $data['category']
-                )
+                ),
+                $request->getAttribute('user')->getId()
             )
         );
 
@@ -105,19 +106,19 @@ class TransactionController
 
     public function load(Request $request, Response $response): Response
     {
-        $params       = $this->requestService->getDataTableQueryParameters($request);
+        $params = $this->requestService->getDataTableQueryParameters($request);
         $transactions = $this->transactionService->getPaginatedTransactions($params);
-        $transformer  = function (Transaction $transaction) {
+        $transformer = function (Transaction $transaction) {
             return [
-                'id'          => $transaction->getId(),
+                'id' => $transaction->getId(),
                 'description' => $transaction->getDescription(),
-                'amount'      => $transaction->getAmount(),
-                'date'        => $transaction->getDate()->format('m/d/Y g:i A'),
-                'category'    => $transaction->getCategory()?->getName(),
+                'amount' => $transaction->getAmount(),
+                'date' => $transaction->getDate()->format('m/d/Y g:i A'),
+                'category' => $transaction->getCategory()?->getName(),
                 'wasReviewed' => $transaction->wasReviewed(),
-                'receipts'    => $transaction->getReceipts()->map(fn(Receipt $receipt) => [
+                'receipts' => $transaction->getReceipts()->map(fn(Receipt $receipt) => [
                     'name' => $receipt->getFilename(),
-                    'id'   => $receipt->getId(),
+                    'id' => $receipt->getId(),
                 ])->toArray(),
             ];
         };

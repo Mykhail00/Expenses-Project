@@ -1,13 +1,13 @@
-import { Modal }          from "bootstrap"
-import { get, post, del } from "./ajax"
-import DataTable          from "datatables.net"
+import {Modal} from "bootstrap"
+import {get, post, del} from "./ajax"
+import DataTable from "datatables.net"
 
 import "../css/transactions.scss"
 
 window.addEventListener('DOMContentLoaded', function () {
-    const newTransactionModal  = new Modal(document.getElementById('newTransactionModal'))
+    const newTransactionModal = new Modal(document.getElementById('newTransactionModal'))
     const editTransactionModal = new Modal(document.getElementById('editTransactionModal'))
-    const uploadReceiptModal   = new Modal(document.getElementById('uploadReceiptModal'))
+    const uploadReceiptModal = new Modal(document.getElementById('uploadReceiptModal'))
     const importTransactionsModal = new Modal(document.getElementById('importTransactionsModal'))
 
     const table = new DataTable('#transactionsTable', {
@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', function () {
         ajax: '/transactions/load',
         orderMulti: false,
         rowCallback: (row, data) => {
-            if (! data.wasReviewed) {
+            if (!data.wasReviewed) {
                 row.classList.add('fw-bold')
             }
 
@@ -35,7 +35,7 @@ window.addEventListener('DOMContentLoaded', function () {
                         }
                     ).format(data)
 
-                    return `<span class="${ data > 0 ? 'text-success' : '' }">${ amount }</span>`
+                    return `<span class="${data > 0 ? 'text-success' : ''}">${amount}</span>`
                 }
             },
             {data: "category"},
@@ -46,9 +46,9 @@ window.addEventListener('DOMContentLoaded', function () {
                     for (let i = 0; i < row.receipts.length; i++) {
                         const receipt = row.receipts[i]
 
-                        const span       = document.createElement('span')
-                        const anchor     = document.createElement('a')
-                        const icon       = document.createElement('i')
+                        const span = document.createElement('span')
+                        const anchor = document.createElement('a')
+                        const icon = document.createElement('i')
                         const deleteIcon = document.createElement('i')
 
                         deleteIcon.role = 'button'
@@ -57,9 +57,9 @@ window.addEventListener('DOMContentLoaded', function () {
                         icon.classList.add('bi', 'bi-file-earmark-text', 'download-receipt', 'text-primary', 'fs-4')
                         deleteIcon.classList.add('bi', 'bi-x-circle-fill', 'delete-receipt', 'text-danger', 'position-absolute')
 
-                        anchor.href   = `/transactions/${ row.id }/receipts/${ receipt.id }`
+                        anchor.href = `/transactions/${row.id}/receipts/${receipt.id}`
                         anchor.target = 'blank'
-                        anchor.title  = receipt.name
+                        anchor.title = receipt.name
 
                         deleteIcon.setAttribute('data-id', receipt.id)
                         deleteIcon.setAttribute('data-transactionId', row.id)
@@ -80,24 +80,24 @@ window.addEventListener('DOMContentLoaded', function () {
                 data: row => `
                     <div class="d-flex gap-2">
                         <div>
-                            <i class="bi ${ row.wasReviewed ? 'bi-check-circle-fill text-success' : 'bi-check-circle' } toggle-reviewed-btn fs-4" 
-                                role="button" data-id="${ row.id }"></i>
+                            <i class="bi ${row.wasReviewed ? 'bi-check-circle-fill text-success' : 'bi-check-circle'} toggle-reviewed-btn fs-4" 
+                                role="button" data-id="${row.id}"></i>
                         </div>
                         <div class="dropdown">
                             <i class="bi bi-gear fs-4" role="button" data-bs-toggle="dropdown"></i>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a class="dropdown-item open-receipt-upload-btn" href="#" data-id="${ row.id }">
+                                    <a class="dropdown-item open-receipt-upload-btn" href="#" data-id="${row.id}">
                                         <i class="bi bi-upload"></i> Upload Receipt
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item edit-transaction-btn" href="#" data-id="${ row.id }">
+                                    <a class="dropdown-item edit-transaction-btn" href="#" data-id="${row.id}">
                                         <i class="bi bi-pencil-fill"></i> Edit
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item delete-transaction-btn" href="#" data-id="${ row.id }">
+                                    <a class="dropdown-item delete-transaction-btn" href="#" data-id="${row.id}">
                                         <i class="bi bi-trash3-fill"></i> Delete
                                     </a>
                                 </li>
@@ -110,7 +110,7 @@ window.addEventListener('DOMContentLoaded', function () {
     })
 
     document.querySelector('#transactionsTable').addEventListener('click', function (event) {
-        const editBtn   = event.target.closest('.edit-transaction-btn')
+        const editBtn = event.target.closest('.edit-transaction-btn')
         const deleteBtn = event.target.closest('.delete-transaction-btn')
         const uploadReceiptBtn = event.target.closest('.open-receipt-upload-btn')
         const deleteReceiptBtn = event.target.closest('.delete-receipt')
@@ -119,14 +119,14 @@ window.addEventListener('DOMContentLoaded', function () {
         if (editBtn) {
             const transactionId = editBtn.getAttribute('data-id')
 
-            get(`/transactions/${ transactionId }`)
+            get(`/transactions/${transactionId}`)
                 .then(response => response.json())
                 .then(response => openEditTransactionModal(editTransactionModal, response))
         } else if (deleteBtn) {
             const transactionId = deleteBtn.getAttribute('data-id')
 
             if (confirm('Are you sure you want to delete this transaction?')) {
-                del(`/transactions/${ transactionId }`).then(response => {
+                del(`/transactions/${transactionId}`).then(response => {
                     if (response.ok) {
                         table.draw()
                     }
@@ -141,11 +141,11 @@ window.addEventListener('DOMContentLoaded', function () {
 
             uploadReceiptModal.show()
         } else if (deleteReceiptBtn) {
-            const receiptId     = deleteReceiptBtn.getAttribute('data-id')
+            const receiptId = deleteReceiptBtn.getAttribute('data-id')
             const transactionId = deleteReceiptBtn.getAttribute('data-transactionid')
 
             if (confirm('Are you sure you want to delete this receipt?')) {
-                del(`/transactions/${ transactionId }/receipts/${ receiptId }`).then(response => {
+                del(`/transactions/${transactionId}/receipts/${receiptId}`).then(response => {
                     if (response.ok) {
                         table.draw()
                     }
@@ -154,7 +154,7 @@ window.addEventListener('DOMContentLoaded', function () {
         } else if (toggleReviewedBtn) {
             const transactionId = toggleReviewedBtn.getAttribute('data-id')
 
-            post(`/transactions/${ transactionId }/review`).then(response => {
+            post(`/transactions/${transactionId}/review`).then(response => {
                 if (response.ok) {
                     table.draw()
                 }
@@ -176,7 +176,7 @@ window.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.save-transaction-btn').addEventListener('click', function (event) {
         const transactionId = event.currentTarget.getAttribute('data-id')
 
-        post(`/transactions/${ transactionId }`, getTransactionFormData(editTransactionModal), editTransactionModal._element)
+        post(`/transactions/${transactionId}`, getTransactionFormData(editTransactionModal), editTransactionModal._element)
             .then(response => {
                 if (response.ok) {
                     table.draw()
@@ -187,14 +187,14 @@ window.addEventListener('DOMContentLoaded', function () {
 
     document.querySelector('.upload-receipt-btn').addEventListener('click', function (event) {
         const transactionId = event.currentTarget.getAttribute('data-id')
-        const formData      = new FormData()
-        const files         = uploadReceiptModal._element.querySelector('input[type="file"]').files
+        const formData = new FormData()
+        const files = uploadReceiptModal._element.querySelector('input[type="file"]').files
 
         for (let i = 0; i < files.length; i++) {
             formData.append('receipt', files[i])
         }
 
-        post(`/transactions/${ transactionId }/receipts`, formData, uploadReceiptModal._element)
+        post(`/transactions/${transactionId}/receipts`, formData, uploadReceiptModal._element)
             .then(response => {
                 if (response.ok) {
                     table.draw()
@@ -205,8 +205,8 @@ window.addEventListener('DOMContentLoaded', function () {
 
     document.querySelector('.import-transactions-btn').addEventListener('click', function (event) {
         const formData = new FormData()
-        const button   = event.currentTarget
-        const files    = importTransactionsModal._element.querySelector('input[type="file"]').files
+        const button = event.currentTarget
+        const files = importTransactionsModal._element.querySelector('input[type="file"]').files
 
         for (let i = 0; i < files.length; i++) {
             formData.append('importFile', files[i])
@@ -243,7 +243,7 @@ window.addEventListener('DOMContentLoaded', function () {
 })
 
 function getTransactionFormData(modal) {
-    let data     = {}
+    let data = {}
     const fields = [
         ...modal._element.getElementsByTagName('input'),
         ...modal._element.getElementsByTagName('select')
@@ -258,7 +258,7 @@ function getTransactionFormData(modal) {
 
 function openEditTransactionModal(modal, {id, ...data}) {
     for (let name in data) {
-        const nameInput = modal._element.querySelector(`[name="${ name }"]`)
+        const nameInput = modal._element.querySelector(`[name="${name}"]`)
 
         nameInput.value = data[name]
     }

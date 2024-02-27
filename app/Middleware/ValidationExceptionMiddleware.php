@@ -20,7 +20,7 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly SessionInterface $session,
         private readonly RequestService $requestService,
-        private readonly ResponseFormatter$responseFormatter
+        private readonly ResponseFormatter $responseFormatter,
     ) {
     }
 

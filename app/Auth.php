@@ -23,7 +23,7 @@ class Auth implements AuthInterface
         private readonly SessionInterface $session,
         private readonly SignupEmail $signupEmail,
         private readonly TwoFactorAuthEmail $twoFactorAuthEmail,
-        private readonly UserLoginCodeService $userLoginCodeService
+        private readonly UserLoginCodeService $userLoginCodeService,
     ) {
     }
 
@@ -35,13 +35,13 @@ class Auth implements AuthInterface
 
         $userId = $this->session->get('user');
 
-        if (! $userId) {
+        if (!$userId) {
             return null;
         }
 
         $user = $this->userProvider->getById($userId);
 
-        if (! $user) {
+        if (!$user) {
             return null;
         }
 
@@ -54,7 +54,7 @@ class Auth implements AuthInterface
     {
         $user = $this->userProvider->getByCredentials($credentials);
 
-        if (! $user || ! $this->checkCredentials($user, $credentials)) {
+        if (!$user || !$this->checkCredentials($user, $credentials)) {
             return AuthAttemptStatus::FAILED;
         }
 
@@ -115,17 +115,17 @@ class Auth implements AuthInterface
     {
         $userId = $this->session->get('2fa');
 
-        if (! $userId) {
+        if (!$userId) {
             return false;
         }
 
         $user = $this->userProvider->getById($userId);
 
-        if (! $user || $user->getEmail() !== $data['email']) {
+        if (!$user || $user->getEmail() !== $data['email']) {
             return false;
         }
 
-        if (! $this->userLoginCodeService->verify($user, $data['code'])) {
+        if (!$this->userLoginCodeService->verify($user, $data['code'])) {
             return false;
         }
 

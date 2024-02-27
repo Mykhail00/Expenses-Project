@@ -1,13 +1,13 @@
-import { post } from './ajax';
+import {post} from './ajax';
 
 window.addEventListener('DOMContentLoaded', function () {
     const saveProfileBtn = document.querySelector('.save-profile')
     const updatePasswordBtn = document.querySelector('.update-password')
 
     saveProfileBtn.addEventListener('click', function () {
-        const form     = this.closest('form')
+        const form = this.closest('form')
         const formData = new FormData(form);
-        const data     = Object.fromEntries(formData.entries());
+        const data = Object.fromEntries(formData.entries());
 
         saveProfileBtn.classList.add('disabled')
 
@@ -23,9 +23,9 @@ window.addEventListener('DOMContentLoaded', function () {
     })
 
     updatePasswordBtn.addEventListener('click', function () {
-        const form     = document.getElementById('passwordForm')
+        const form = document.getElementById('passwordForm')
         const formData = new FormData(form);
-        const data     = Object.fromEntries(formData.entries());
+        const data = Object.fromEntries(formData.entries());
 
         updatePasswordBtn.classList.add('disabled')
 

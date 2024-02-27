@@ -64,7 +64,7 @@ class TransactionController
 
     public function delete(Response $response, Transaction $transaction): Response
     {
-        $this->entityManagerService->delete($transaction, true);
+        $this->transactionService->delete($transaction);
 
         return $response;
     }
@@ -96,7 +96,8 @@ class TransactionController
                     (float) $data['amount'],
                     new DateTime($data['date']),
                     $data['category']
-                )
+                ),
+                $request->getAttribute('user')->getId()
             )
         );
 

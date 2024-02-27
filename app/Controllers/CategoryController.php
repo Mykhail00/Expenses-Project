@@ -47,7 +47,7 @@ class CategoryController
 
     public function delete(Response $response, Category $category): Response
     {
-        $this->entityManagerService->delete($category, true);
+        $this->categoryService->delete($category);
 
         return $response;
     }
@@ -64,8 +64,9 @@ class CategoryController
         $data = $this->requestValidatorFactory->make(UpdateCategoryRequestValidator::class)->validate(
             $request->getParsedBody()
         );
+        $userId = $request->getAttribute('user')->getId();
 
-        $this->entityManagerService->sync($this->categoryService->update($category, $data['name']));
+        $this->entityManagerService->sync($this->categoryService->update($category, $data['name'], $userId));
 
         return $response;
     }

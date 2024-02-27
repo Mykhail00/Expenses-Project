@@ -16,32 +16,76 @@
     <div class="dashboard">
         <div class="top-container mb-4 row g-0 rounded-4">
             <div class="col-8 border-end border-3">
-                <div class="row justify-content-between">
-                    <div class="col p-4">Expense $</div>
-                    <div class="col p-4">Income $</div>
-                    <div class="col p-4">Net $</div>
+                <div class="row text-center" id="timePeriod">
+                    <div class="col p-4 pb-0 fs-3">Select time period: </div>
+                    <div class="col p-4 pb-0 fs-4">
+                        <input type="date" value="{{ 'now' | date('Y-m-01') }}" name="startDate" id="startDate" style="border: none">
+                    </div>
+                    <div class="col p-4 pb-0 fs-4">
+                        <input type="date" value="{{ 'now' | date('Y-m-d') }}" name="endDate" id="endDate" style="border: none">
+                    </div>
+                </div>
+                <div class="row justify-content-between text-center">
+                    <div class="col p-4 pb-0 fs-2">
+                        <div>Expense</div>
+                        <div id="expense" class="fw-bold text-danger"></div>
+                    </div>
+                    <div class="col p-4 pb-0 fs-2">
+                        <div>Income</div>
+                        <div id="income" class="fw-bold text-success"></div>
+                    </div>
+                    <div class="col p-4 pb-0 fs-2">
+                        <div>Net</div>
+                        <div id="net" class="fw-bold {{ totals.net >= 0 ? 'text-success' : 'text-danger' }}"></div>
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="col p-4">Line/Bar/Donut Graph</div>
+                    <div class="col p-4">
+                        <div class="row">
+                            <div class="col fs-1 text-end mb-2 d-flex justify-content-end">
+                                <select id="summeryYear" class="form-select fw-bold fs-2" style="width: auto; margin-left: auto; border: none">
+                                    {% for year in transactionsYears %}
+                                        <option value="{{ year }}">{{ year }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col fs-1 mb-2">Summary</div>
+                        </div>
+                        <canvas id="yearToDateChart"></canvas>
+                    </div>
                 </div>
             </div>
             <div class="col p-4">
-                Latest Transactions
+                <h4>Recent Transactions</h4>
+                <table class="table">
+                    <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.description[0:20] }}</td>
+                            <td class="{{ transaction.amount > 0 ? 'text-success fw-bold' : 'text-fail fw-bold' }}">
+                                {{ transaction.amount < 0 ? '-' : '' }}${{ transaction.amount | abs | number_format(2) }}
+                            </td>
+                            <td>
+                                <div>{{ transaction.categoryName ? transaction.categoryName : 'N/A' }}</div>
+                                <div>{{ transaction.date | date('m/d/Y') }}</div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="categories-container row">
-            <div class="col">
-                <div class="category-card p-4 rounded-4">Category 1</div>
-            </div>
-            <div class="col">
-                <div class="category-card p-4 rounded-4">Category 2</div>
-            </div>
-            <div class="col">
-                <div class="category-card p-4 rounded-4">Category 3</div>
-            </div>
-            <div class="col">
-                <div class="category-card p-4 rounded-4">Category 4</div>
-            </div>
+            {% for spendingCategory in topSpendingCategories %}
+                <div class="col">
+                    <div class="category-card p-4 text-center d-flex align-items-center justify-content-center">
+                        <div>
+                            <h6 class="fs-6 fw-normal">{{ spendingCategory.name | default('N/A')}}</h6>
+                            <h1 class="fs-1 text-danger text-opacity-75">${{ spendingCategory.total }}</h1>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

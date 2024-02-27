@@ -7,13 +7,18 @@ namespace App\Services;
 use App\Contracts\EntityManagerServiceInterface;
 use App\DataObjects\DataTableQueryParams;
 use App\Entity\Category;
+use App\Entity\Transaction;
 use App\Entity\User;
+use App\Enum\CacheKey;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Psr\SimpleCache\CacheInterface;
 
 class CategoryService
 {
-    public function __construct(private readonly EntityManagerServiceInterface $entityManager)
-    {
+    public function __construct(
+        private readonly EntityManagerServiceInterface $entityManager,
+        private readonly CacheInterface $cache,
+    ) {
     }
 
     public function create(string $name, User $user): Category
@@ -21,7 +26,7 @@ class CategoryService
         $category = new Category();
         $category->setUser($user);
 
-        return $this->update($category, $name);
+        return $this->update($category, $name, $user->getId());
     }
 
     public function getPaginatedCategories(DataTableQueryParams $params): Paginator
@@ -52,11 +57,21 @@ class CategoryService
         return $this->entityManager->find(Category::class, $id);
     }
 
-    public function update(Category $category, string $name): Category
+    public function update(Category $category, string $name, int $userId): Category
     {
         $category->setName($name);
 
+        $this->unsetCache($userId);
+
         return $category;
+    }
+
+    public function delete(Category $category): void
+    {
+        $userId = $category->getUser()->getId();
+
+        $this->entityManager->delete($category, true);
+        $this->unsetCache($userId);
     }
 
     public function getCategoryNames(): array
@@ -83,5 +98,35 @@ class CategoryService
         }
 
         return $categoryMap;
+    }
+
+    public function getTopSpendingCategories(int $userId, int $limit): array
+    {
+        $key = $userId . CacheKey::TopCategories->value;
+
+        if ($this->cache->has($key)) {
+            return $this->cache->get($key);
+        }
+
+        $topSpendingCategories = $this->entityManager
+            ->getRepository(Transaction::class)
+            ->createQueryBuilder('t')
+            ->select('SUM(t.amount) as total, c.name')
+            ->leftJoin('t.category', 'c')
+            ->where('t.amount < 0')
+            ->groupBy('t.category')
+            ->orderBy('total', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getArrayResult();
+
+        $this->cache->set($key, $topSpendingCategories, 10 * 60);
+
+        return $topSpendingCategories;
+    }
+
+    public function unsetCache(int $userId): void
+    {
+        $this->cache->delete($userId . CacheKey::TopCategories->value);
     }
 }
